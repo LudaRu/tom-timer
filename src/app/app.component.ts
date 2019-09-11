@@ -14,6 +14,10 @@ export class AppComponent implements OnInit {
         this.timerService.start();
     }
 
+    skip() {
+        this.timerService.seconds$.next(2);
+    }
+
     ngOnInit() {
     }
 }
