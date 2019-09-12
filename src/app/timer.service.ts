@@ -1,5 +1,8 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
+import {StateManager} from './state-manager/manager';
+import * as fsmStates from './state-manager/states';
+import {STATE_TASK} from './state-manager/states';
 
 @Injectable({
     providedIn: 'root'
@@ -10,70 +13,34 @@ export class TimerService {
     BIG_PAUSE_SECONDS = 30;
     COUNT_TASK = 4;
 
-    STATES = {
-        STOP: 0,
-        TASK: 1,
-        PAUSE: 2,
-        BIG_PAUSE: 3,
-        FINISH: 4,
-    };
-
     public seconds$ = new BehaviorSubject(this.TASK_SECONDS);
-    public state$ = new BehaviorSubject('task');
+    public state$ = new BehaviorSubject(null);
 
     private timerLoop: any = null;
     private countTask = 0;
-
-    stateMachine = {
-        task: (second) => {},
-        pause: (second) => {},
-        stop: () => {},
+    private numberTask = {
+        number: 0,
     };
 
-    constructor() {
-    }
+    constructor() {}
 
     start() {
-        this.state$.next(this.STATES.TASK);
-        this.startTimerLoop();
+        const fsm = new StateManager(fsmStates.STATE_TASK);
+
+        this.startTimerLoop(fsm);
     }
 
-    nextTask() {
-        this.state$.next(this.STATES.TASK);
-    }
-
-    pause() {
-        this.state$.next(this.STATES.PAUSE);
-        this.seconds$.next(this.PAUSE_SECONDS);
-    }
-
-    bigPause() {
-        this.state$.next(this.STATES.BIG_PAUSE);
-        this.seconds$.next(this.BIG_PAUSE_SECONDS);
-    }
-
-    finish() {
-        clearInterval(this.timerLoop);
-    }
-
-    startTimerLoop() {
+    startTimerLoop(fsm) {
         this.timerLoop = setInterval(() => {
             const second = this.seconds$.value - 1;
             if (second >= 0) {
                 this.seconds$.next(second);
             } else {
-                this.triggerState();
+                const transition = fsm.findTransitionFor({numberTask: this.numberTask, seconds: second});
+                if (transition) {
+                    fsm.performTransition(transition)({numberTask: this.numberTask, state$: this.state$, timerLoop: this.timerLoop });
+                }
             }
         }, 1000);
-    }
-
-    triggerState() {
-        switch (this.state$.value) {
-            case 'task' :
-                if() {
-
-                }
-            case 'pause':
-        }
     }
 }
