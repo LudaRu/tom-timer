@@ -1,0 +1,11 @@
+<div class="col-12 d-flex flex-column justify-content-center">
+    <div class="text-center display-1">{{timerService.seconds$ | async | time}}</div>
+    <div class="btn" (click)="skip()">Skip</div>
+    <ngb-alert [dismissible]="false" [type]="'primary'">
+        <strong>Задача:</strong> {{state}} <small>Выполняется №{{timerService.completedTask$ | async}}</small>
+    </ngb-alert>
+    <div class="d-flex justify-content-center">
+        <div *ngIf="state === 'FINISH' || !state" class="btn btn-success" (click)="start()">Начать задачу</div>
+        <div *ngIf="state === 'TASK'" class="btn btn-danger">Завершить задачу</div>
+    </div>
+</div>
