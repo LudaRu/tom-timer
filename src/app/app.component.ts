@@ -1,31 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {TimerService} from './task-execution/timer.service';
+import {Component} from '@angular/core';
 
 @Component({
     selector: 'app-root',
     template: `
         <div class="container">
-            <div class="row mt-5">
-                <router-outlet></router-outlet>
-            </div>
+            <router-outlet></router-outlet>
         </div>
     `,
     styleUrls: ['./app.component.css'],
-    providers: [TimerService]
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
-    state = null;
-
-    constructor(private timerService: TimerService) {
-    }
-
-    ngOnInit() {
-        this.timerService.state$.subscribe(
-            (v) => {
-                console.log('asdasd', v);
-                this.state = v;
-            }
-        );
-    }
+    constructor() {}
 }

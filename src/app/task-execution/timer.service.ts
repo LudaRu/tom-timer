@@ -9,8 +9,8 @@ import * as states from './state-manager/states';
 export class TimerService {
 
     public seconds$ = new BehaviorSubject(0);
-    public state$ =  new BehaviorSubject(null);
-    public completedTask$ =  new BehaviorSubject(0);
+    public state$ = new BehaviorSubject(null);
+    public completedTask$ = new BehaviorSubject(0);
 
     private timerLoop: any = null;
     private processParams = {
@@ -41,6 +41,7 @@ export class TimerService {
         this.resetVar();
         this.processParams.processInfo.limitTask = countTask;
         const sm = new StateManager(states.STATE_TASK, this.processParams, this.state$);
+        this.completedTask$.next(this.processParams.processInfo.completedTask);
         this.startTimerLoop(sm);
     }
 

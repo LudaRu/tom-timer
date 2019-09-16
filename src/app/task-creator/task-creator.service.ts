@@ -11,23 +11,21 @@ export interface Tasks {
     providedIn: 'root'
 })
 
-
 export class TaskCreatorService {
 
-    public tasks$ = new BehaviorSubject(null);
+    public tasks$ = new BehaviorSubject([]);
 
-    constructor() {
+    constructor() {}
+
+    addTask(task: any) {
+        this.tasks$.next(this.tasks$.getValue().concat([task]));
     }
 
-    addTask(task: Tasks) {
-        this.tasks$.next(task);
-    }
-
-    deleteTask() {
-        this.tasks$.next(0);
-    }
-
-    getTasks(): [Tasks] {
-        return this.tasks$.value();
+    deleteTask(task: any) {
+        const taskArr: any[] = this.tasks$.getValue();
+        taskArr.forEach((item, index) => {
+            if (item === task) { taskArr.splice(index, 1); }
+        });
+        this.tasks$.next(taskArr);
     }
 }

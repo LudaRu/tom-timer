@@ -1,24 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TimerService} from './timer.service';
 import {TaskCreatorService} from '../task-creator/task-creator.service';
 
 @Component({
-  selector: 'app-task-execution',
-  templateUrl: './task-execution.component.html',
-    providers: [TimerService, TaskCreatorService]
+    selector: 'app-task-execution',
+    templateUrl: './task-execution.component.html',
+    providers: [TimerService]
 })
 export class TaskExecutionComponent implements OnInit {
     state = null;
+    tasks = [];
 
     constructor(
         private timerService: TimerService,
         private taskCreatorService: TaskCreatorService,
-    ) {}
+    ) {
+    }
 
     start() {
         const tasks = this.taskCreatorService.tasks$.value;
-        console.log(tasks);
-        this.timerService.start(5);
+        console.log('tasks', tasks);
+        this.timerService.start(this.taskCreatorService.tasks$.value.length);
     }
 
     skip() {
@@ -26,6 +28,7 @@ export class TaskExecutionComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.taskCreatorService.tasks$.subscribe(v => this.tasks = v);
         this.timerService.state$.subscribe(
             (v) => {
                 console.log('asdasd', v);
