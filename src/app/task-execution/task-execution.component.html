@@ -1,21 +1,37 @@
 <div class="col-12 d-flex flex-column justify-content-center">
     <div class="text-center display-1">{{timerService.seconds$ | async | time}}</div>
     <div class="btn" (click)="skip()">Skip</div>
-    <ngb-alert [dismissible]="false" [type]="'primary'">
-        <strong>Задача:</strong> {{state}} <small>Выполняется № {{tasks[(timerService.completedTask$ | async) - 1].name}}</small>
+
+
+    <ngb-alert *ngIf="state === 'TASK'" [dismissible]="false" [type]="'danger'">
+        <strong>В работе:</strong><small>{{tasks[(timerService.completedTask$ | async) - 1].name}}</small>
     </ngb-alert>
+
+    <ngb-alert *ngIf="state === 'PAUSE' || state === 'BIG_PAUSE'" [dismissible]="false" [type]="'warning'">
+        <strong>Пауза</strong>
+    </ngb-alert>
+
+    <ngb-alert *ngIf="state === 'FINISH'" [dismissible]="false" [type]="'secondary'">
+        <strong>Работа закончена</strong>
+    </ngb-alert>
+
+
     <div class="d-flex justify-content-center">
         <div *ngIf="state === 'FINISH' || !state" class="btn btn-success" (click)="start()">Начать задачу</div>
+        <div *ngIf="state === 'PAUSE' || state === 'BIG_PAUSE'" class="btn btn-danger" (click)="startNextTask()">Завершить задачу и начать следующую</div>
     </div>
 </div>
 
-<div *ngFor="let task of tasks; let i = index;" class="col-12 mb-2">
-    <div class="row">
-        <div class="col-9">
-            {{task.name}}
-        </div>
-        <div class="col-2">
+<table class="table table-striped">
+    <tbody>
+    <ng-container *ngFor="let task of tasks; index as i">
+        <tr  [ngClass]="{'activeTask': (i == activeTaskNumber-1)}">
+            <td>
+                <p class="float-left">{{ task.name }}</p>
+                <span class="float-right"></span>
+            </td>
+        </tr>
+    </ng-container>
 
-        </div>
-    </div>
-</div>
+    </tbody>
+</table>

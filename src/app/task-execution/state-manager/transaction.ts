@@ -11,21 +11,21 @@ export const transactions = {
         {
             to: STATE_PAUSE,
             when: (v) => [
-                v.processInfo.completedTask < v.processInfo.limitTask,
-                v.processInfo.completedTask % 4 !== 0 || v.processInfo.completedTask === 0,
+                v.processInfo.numberTaskProcess < v.processInfo.limitTask,
+                v.processInfo.counter % 4 !== 0 || v.processInfo.counter === 0,
             ]
         },
         {
             to: STATE_BIG_PAUSE,
             when: (v) => [
-                v.processInfo.completedTask < v.processInfo.limitTask,
-                v.processInfo.completedTask % 4 === 0 && v.processInfo.completedTask !== 0,
+                v.processInfo.numberTaskProcess < v.processInfo.limitTask,
+                v.processInfo.counter % 4 === 0 && v.processInfo.counter !== 0,
             ]
         },
         {
             to: STATE_FINISH,
             when: (v) => [
-                v.processInfo.completedTask >= v.processInfo.completedTask,
+                v.processInfo.counter >= v.processInfo.counter,
             ]
         },
     ],
@@ -34,13 +34,13 @@ export const transactions = {
         {
             to: STATE_TASK,
             when: (v) => [
-                v.processInfo.completedTask < v.processInfo.limitTask,
+                v.processInfo.numberTaskProcess < v.processInfo.limitTask,
             ]
         },
         {
             to: STATE_FINISH,
             when: (v) => [
-                v.processInfo.completedTask >= v.processInfo.limitTask,
+                v.processInfo.numberTaskProcess >= v.processInfo.limitTask,
             ]
         },
     ],
@@ -49,13 +49,13 @@ export const transactions = {
         {
             to: STATE_TASK,
             when: (v) => [
-                v.processInfo.completedTask < v.processInfo.limitTask,
+                v.processInfo.numberTaskProcess < v.processInfo.limitTask,
             ]
         },
         {
             to: STATE_FINISH,
             when: (v) => [
-                v.processInfo.completedTask >= v.processInfo.limitTask,
+                v.processInfo.numberTaskProcess >= v.processInfo.limitTask,
             ]
         },
     ]

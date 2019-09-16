@@ -5,7 +5,6 @@ import {TaskExecutionComponent} from './task-execution/task-execution.component'
 
 const routes: Routes = [
     { path: '', component: TaskCreatorComponent},
-    { path: 'create', component: TaskCreatorComponent},
     { path: 'execution', component: TaskExecutionComponent},
 ];
 

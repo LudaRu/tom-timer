@@ -10,11 +10,11 @@ export class TimerService {
 
     public seconds$ = new BehaviorSubject(0);
     public state$ = new BehaviorSubject(null);
-    public completedTask$ = new BehaviorSubject(0);
+    public numberTaskProcess$ = new BehaviorSubject(0);
 
     private timerLoop: any = null;
     private processParams = {
-        processInfo: {completedTask: 0, limitTask: 0},
+        processInfo: {limitTask: 0, numberTaskProcess: 0, counter: 0},
         seconds: 0,
         seconds$: this.seconds$,
         timerLoop: this.timerLoop,
@@ -26,11 +26,11 @@ export class TimerService {
     resetVar() {
         this.seconds$.next(0);
         this.state$.next(null);
-        this.completedTask$.next(0);
+        this.numberTaskProcess$.next(0);
 
         clearInterval(this.processParams.timerLoop);
         this.processParams = {
-            processInfo: {completedTask: 0, limitTask: 0},
+            processInfo: {limitTask: 0, numberTaskProcess: 0, counter: 0},
             seconds: 0,
             seconds$: this.seconds$,
             timerLoop: this.timerLoop,
@@ -41,8 +41,12 @@ export class TimerService {
         this.resetVar();
         this.processParams.processInfo.limitTask = countTask;
         const sm = new StateManager(states.STATE_TASK, this.processParams, this.state$);
-        this.completedTask$.next(this.processParams.processInfo.completedTask);
+        this.numberTaskProcess$.next(this.processParams.processInfo.numberTaskProcess);
         this.startTimerLoop(sm);
+    }
+
+    startNextTask() {
+        // this.processParams.processInfo.needNextTask = true;
     }
 
     private startTimerLoop(sm) {
@@ -52,7 +56,7 @@ export class TimerService {
                 this.seconds$.next(second);
             } else {
                 sm.transit(this.processParams);
-                this.completedTask$.next(this.processParams.processInfo.completedTask);
+                this.numberTaskProcess$.next(this.processParams.processInfo.numberTaskProcess);
             }
         }, 1000);
     }

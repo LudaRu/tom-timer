@@ -5,27 +5,29 @@ import {TaskCreatorService} from './task-creator.service';
 @Component({
     selector: 'app-task-creator',
     template: `
-            <div class="row">
-                <div class="col-12">
-                    <form [formGroup]="form"  class="input-group mb-2 mt-2">
-                        <input type="text" formControlName="name" placeholder="Задача" class="form-control"/>
-                        <div class="input-group-append">
-                            <span class="input-group-text" (click)="addTask()">Добавить задачу</span>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-12"><div class="btn btn-success" routerLink="/execution">Готово</div></div>
-                <div *ngFor="let task of tasks; let i = index;" class="col-12 mb-2">
-                    <div class="row">
-                        <div class="col-9">
-                            {{task.name}}
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-danger" (click)="onDelete(task)">X</button>
-                        </div>
+        <div class="row">
+            <div class="col-12">
+                <form [formGroup]="form" class="input-group mb-2 mt-2">
+                    <input type="text" formControlName="name" placeholder="Задача" class="form-control"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text btn" (click)="addTask()">Добавить задачу</span>
                     </div>
-                </div>
+                </form>
             </div>
+            <table class="table table-striped">
+                <tbody>
+                <tr *ngFor="let task of tasks; index as i">
+                    <td>
+                        <p class="float-left">{{ task.name }}</p>
+                        <button class="btn btn-danger float-right" (click)="onDelete(task)">X</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-12" *ngIf="tasks.length">
+            <div class="btn btn-success" routerLink="/execution">Готово</div>
+        </div>
     `,
     styleUrls: ['./task-creator.component.css']
 })
@@ -49,7 +51,7 @@ export class TaskCreatorComponent implements OnInit {
     }
 
     addTask() {
-        console.log(this.form.value)
+        console.log(this.form.value);
         this.taskCreatorService.addTask(this.form.value);
         this.form.get('name').setValue('');
     }

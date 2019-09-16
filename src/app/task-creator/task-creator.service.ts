@@ -21,6 +21,11 @@ export class TaskCreatorService {
         this.tasks$.next(this.tasks$.getValue().concat([task]));
     }
 
+    addTomatToTask(task: any) {
+        task.tomatos++;
+        this.tasks$.next(this.tasks$.getValue().concat([task]));
+    }
+
     deleteTask(task: any) {
         const taskArr: any[] = this.tasks$.getValue();
         taskArr.forEach((item, index) => {
